@@ -1,19 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-export const Navbar = () => {
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+const Navbar = () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        return null; // Don't render the Navbar if no token is present
+    }
+
+    return (
+        <nav>
+            <ul>
+                <li>
+                    <Link to="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                    <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                    <Link to="/settings">Settings</Link>
+                </li>
+                <li>
+                    <Link to="/logout">Logout</Link>
+                </li>
+            </ul>
+        </nav>
+    );
 };
+
+export default Navbar;

@@ -21,6 +21,15 @@ const Navbar = () => {
                     <Link to="/settings">Settings</Link>
                 </li>
                 <li>
+                    <Link to="/cryptos">Cryptos</Link>
+                </li>
+                <li>
+                    <Link to="/servicios">Services</Link>
+                </li>
+                <li>
+                    <Link to="/stocks">Stock</Link>
+                </li>
+                <li>
                     <Link to="/logout">Logout</Link>
                 </li>
             </ul>

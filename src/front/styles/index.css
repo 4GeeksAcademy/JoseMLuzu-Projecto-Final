@@ -1,196 +1,323 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+/* General Styles used on every website (Don't Repeat Yourself) */
 
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
 /* Body Style */
 body {
-    background-color: #f4f4f9;
-    color: #333;
-    line-height: 1.6;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
 }
 
 /* Container */
 .container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
 }
 
 /* Navbar Styles */
 nav {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem 0;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 0;
 }
 
 nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
+  list-style: none;
+  display: flex;
+  justify-content: center;
 }
 
 nav ul li {
-    margin: 0 20px;
+  margin: 0 20px;
 }
 
 nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
 nav ul li a:hover {
-    color: #ddd;
+  color: #ddd;
 }
 
 /* Form Styles */
 form {
-    background: #fff;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    max-width: 500px;
-    margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 2rem auto;
 }
 
 form div {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 form input[type="email"],
 form input[type="password"],
 form button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 form input[type="email"],
 form input[type="password"] {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 form button {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 form button:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
 /* Success and Error Messages */
 p {
-    padding: 1rem;
-    border-radius: 4px;
-    margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
 }
 
 p.success {
-    background-color: #dff0d8;
-    color: #3c763d;
+  background-color: #dff0d8;
+  color: #3c763d;
 }
 
 p.error {
-    background-color: #f2dede;
-    color: #a94442;
+  background-color: #f2dede;
+  color: #a94442;
 }
 
 /* Centered Content */
 .centered {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 /* Button Styles */
 button {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 4px;
 }
 
 button:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Card Styles */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #444; /* Updated color for darker card */
+  color: #fff; /* Ensure text is visible on dark background */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-form div {
-    margin-bottom: 1rem;
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff; /* Adjust title color for readability */
 }
 
-form label {
-    display: block;
-    margin-bottom: 0.5rem;
+.card-text {
+  color: #a0cfff; /* Updated color for card text */
+  font-weight: bold;
 }
 
-form input,
-form select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Animations CSS */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 
-button {
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms, transform 500ms;
 }
 
-button:hover {
-    background-color: #0056b3;
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-h4 {
-    margin-top: 1rem;
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 500ms, transform 500ms;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
+/* Animation for inputs */
+.animated-input {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeIn 1s forwards;
 }
 
-ul li {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ccc;
+@keyframes fadeIn {
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
 
+/* Zoom effect on hover for the card */
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Button hover effect */
+.btn-primary {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Additional Styles */
+.App {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.form {
+  margin-bottom: 20px;
+}
+
+.form div {
+  margin-bottom: 10px;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.form button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: #45a049;
+}
+
+.gasto-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.gasto-list li {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.total {
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Card Styles */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #444; /* Color más oscuro para la tarjeta */
+  color: #fff; /* Asegura que el texto sea visible sobre el fondo oscuro */
+  padding: 1rem;
+  position: relative; /* Necesario para posicionar el botón */
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff; /* Ajusta el color del título para que sea visible */
+}
+
+.card-text {
+  color: #a0cfff; /* Color ajustado para el texto de la tarjeta */
+  font-weight: bold;
+}
+
+.card-button {
+  position: absolute; /* Posiciona el botón en la parte inferior de la tarjeta */
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #007bff; /* Color del botón */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+  background-color: #0056b3;
+}

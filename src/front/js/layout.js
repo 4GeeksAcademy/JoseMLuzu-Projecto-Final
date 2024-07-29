@@ -9,6 +9,8 @@ import Register from "./pages/register";
 import Dashboard from "./component/dashboard";
 import CategoryManager from "./pages/servicios";
 import Logout from "./component/logout";
+import CryptoApp from "./pages/cryptos";
+import StocksApp from "./pages/negocios";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
@@ -34,6 +36,8 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Dashboard />} path="/dashboard" />
                         <Route element={<CategoryManager />} path="/servicios" />
+                        <Route element={<CryptoApp />} path="/cryptos" />
+                        <Route element={<StocksApp />} path="/stocks" />
                         <Route element={<Register />} path="/register" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Demo />} path="/demo" />

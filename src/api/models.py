@@ -2,20 +2,31 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# Tabla de asociación para los favoritos de los usuarios
+class UserFavorite(db.Model):
+    __tablename__ = 'user_favorites'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    crypto_id = db.Column(db.Integer, db.ForeignKey('crypto.id'), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('user_favorites', cascade='all, delete-orphan'))
+    crypto = db.relationship('Crypto', backref=db.backref('crypto_favorites', cascade='all, delete-orphan'))
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     is_active = db.Column(db.Boolean, default=True)
 
-    # Relación con los favoritos
+    # Relación con los favoritos a través de la tabla de asociación
     favorites = db.relationship('Crypto', secondary='user_favorites', backref=db.backref('users', lazy='dynamic'))
 
     def serialize(self):
         return {
             'id': self.id,
             'email': self.email,
-            'is_active': self.is_active
+            'is_active': self.is_active,
+            'favorites': [crypto.serialize() for crypto in self.favorites]
         }
 
 class Category(db.Model):
@@ -59,12 +70,3 @@ class Crypto(db.Model):
             'name': self.name,
             'symbol': self.symbol
         }
-
-# Tabla de asociación para los favoritos de los usuarios
-class UserFavorites(db.Model):
-    __tablename__ = 'user_favorites'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    crypto_id = db.Column(db.Integer, db.ForeignKey('crypto.id'), primary_key=True)
-
-    user = db.relationship('User', backref=db.backref('user_favorites', cascade='all, delete-orphan'))
-    crypto = db.relationship('Crypto', backref=db.backref('crypto_favorites', cascade='all, delete-orphan'))

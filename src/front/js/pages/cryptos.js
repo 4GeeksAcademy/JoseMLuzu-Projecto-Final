@@ -7,13 +7,16 @@ function CryptoApp() {
   const [orderBy, setOrderBy] = useState('market_cap_desc');
   const [searchQuery, setSearchQuery] = useState('');
   const [favorites, setFavorites] = useState(new Set());
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCryptoData = async () => {
+      setLoading(true);
       const apiUrl = 'https://api.coingecko.com/api/v3/coins/markets';
       const params = {
         vs_currency: 'usd',
-        order: 'market_cap_desc',
+        order: orderBy,
         per_page: 60,
         page: 1,
         sparkline: true
@@ -28,6 +31,9 @@ function CryptoApp() {
         setCryptoData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,7 +53,7 @@ function CryptoApp() {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setFavorites(new Set(data.favorites));
+        setFavorites(new Set(data));
       } catch (error) {
         console.error('Error fetching favorites:', error);
       }
@@ -55,7 +61,7 @@ function CryptoApp() {
 
     fetchCryptoData();
     fetchFavorites();
-  }, []);
+  }, [orderBy]);
 
   const handleOrderByChange = (event) => {
     setOrderBy(event.target.value);
@@ -68,19 +74,18 @@ function CryptoApp() {
   const toggleFavorite = async (cryptoId) => {
     const token = localStorage.getItem('token');
     if (!token) {
-      // Handle token not found scenario
+      console.error('No token found');
       return;
     }
 
     setFavorites(prevFavorites => {
-      const newFavorites = new Set(prevFavorites);
+      //const newFavorites = new Set(prevFavorites);
       if (newFavorites.has(cryptoId)) {
         newFavorites.delete(cryptoId);
       } else {
         newFavorites.add(cryptoId);
       }
 
-      // Enviar favoritos al backend
       fetch('/api/favorites', {
         method: 'POST',
         headers: {
@@ -158,59 +163,65 @@ function CryptoApp() {
           </div>
         </div>
       </div>
-      <div className="row">
-        {sortedCryptoData.map(crypto => (
-          <div key={crypto.id} className="col-md-4 mb-4">
-            <div className="card">
-              <img
-                src={crypto.image}
-                className="card-img-top"
-                alt={crypto.name}
-                style={{ width: '50px', height: '50px', margin: 'auto' }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{crypto.name}</h5>
-                <p className="card-text">Price: ${crypto.current_price.toFixed(2)}</p>
-                {crypto.sparkline_in_7d && (
-                  <div style={{ height: '50px' }}>
-                    <Line
-                      data={generateSparklineData(crypto.sparkline_in_7d.price)}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: { display: false },
-                          y: { display: false },
-                        },
-                        plugins: {
-                          legend: { display: false },
-                          tooltip: { enabled: false },
-                        },
-                        elements: { line: { tension: 0.1 } }
-                      }}
-                      height={50}
-                    />
-                  </div>
-                )}
-                <a
-                  href={`https://www.coingecko.com/en/coins/${crypto.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary mt-2"
-                >
-                  View on CoinGecko
-                </a>
-                <button
-                  className={`btn ${favorites.has(crypto.id) ? 'btn-danger' : 'btn-outline-danger'} mt-2 ms-2`}
-                  onClick={() => toggleFavorite(crypto.id)}
-                >
-                  {favorites.has(crypto.id) ? 'Unfavorite' : 'Favorite'}
-                </button>
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <div className="row">
+          {sortedCryptoData.map(crypto => (
+            <div key={crypto.id} className="col-md-4 mb-4">
+              <div className="card">
+                <img
+                  src={crypto.image}
+                  className="card-img-top"
+                  alt={crypto.name}
+                  style={{ width: '50px', height: '50px', margin: 'auto' }}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{crypto.name}</h5>
+                  <p className="card-text">Price: ${crypto.current_price.toFixed(2)}</p>
+                  {crypto.sparkline_in_7d && (
+                    <div style={{ height: '50px' }}>
+                      <Line
+                        data={generateSparklineData(crypto.sparkline_in_7d.price)}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            x: { display: false },
+                            y: { display: false },
+                          },
+                          plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                          },
+                          elements: { line: { tension: 0.1 } }
+                        }}
+                        height={50}
+                      />
+                    </div>
+                  )}
+                  <a
+                    href={`https://www.coingecko.com/en/coins/${crypto.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary mt-2"
+                  >
+                    View on CoinGecko
+                  </a>
+                  <button
+                    className={`btn ${favorites.has(crypto.id) ? 'btn-danger' : 'btn-outline-danger'} mt-2 ms-2`}
+                    onClick={() => toggleFavorite(crypto.id)}
+                  >
+                    {favorites.has(crypto.id) ? 'Unfavorite' : 'Favorite'}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

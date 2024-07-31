@@ -6,7 +6,7 @@ from flask_cors import CORS
 import os
 
 from api.utils import APIException, generate_sitemap
-from api.models import db, User, Category, Item
+from api.models import db, User, Category, Item, Crypto, UserFavorite
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -129,18 +129,20 @@ def get_categories():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# Ruta para eliminar categoría
-@app.route('/categories/<int:category_id>', methods=['DELETE'])
-def delete_category(category_id):
+# Ruta para eliminar una categoría
+@app.route('/categories/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_category(id):
+    category = Category.query.get(id)
+    if not category:
+        return jsonify({'msg': 'Category not found'}), 404
+    
     try:
-        category = Category.query.get(category_id)
-        if not category:
-            return jsonify({"msg": "Category not found"}), 404
         db.session.delete(category)
         db.session.commit()
-        return jsonify({"msg": "Category deleted"}), 200
+        return jsonify({'msg': 'Category deleted successfully'}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({'error': str(e)}), 500
 
 # Ruta para agregar ítem
 @app.route('/items', methods=['POST'])
@@ -165,18 +167,20 @@ def get_items():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# Ruta para eliminar ítem
-@app.route('/items/<int:item_id>', methods=['DELETE'])
-def delete_item(item_id):
+# Ruta para eliminar un ítem
+@app.route('/items/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_item(id):
+    item = Item.query.get(id)
+    if not item:
+        return jsonify({'msg': 'Item not found'}), 404
+    
     try:
-        item = Item.query.get(item_id)
-        if not item:
-            return jsonify({"msg": "Item not found"}), 404
         db.session.delete(item)
         db.session.commit()
-        return jsonify({"msg": "Item deleted"}), 200
+        return jsonify({'msg': 'Item deleted successfully'}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({'error': str(e)}), 500
 
 # Ruta protegida
 @app.route('/private', methods=['GET'])
@@ -184,6 +188,65 @@ def delete_item(item_id):
 def private():
     identity = get_jwt_identity()
     return jsonify({'msg': 'This is a private message'})
+
+# Endpoint para obtener los favoritos del usuario
+@app.route('/api/favorites', methods=['GET'])
+@jwt_required()
+def get_favorites():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    
+    if not user:
+        return jsonify({'msg': 'User not found'}), 404
+    
+    favorites = [favorite.crypto_id for favorite in user.user_favorites]
+    return jsonify(favorites), 200
+
+# Endpoint para agregar un favorito
+@app.route('/api/favorites', methods=['POST'])
+@jwt_required()
+def add_favorite():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    
+    if not user:
+        return jsonify({'msg': 'User not found'}), 404
+    
+    data = request.get_json()
+    if not data or 'crypto_id' not in data:
+        return jsonify({'msg': 'Crypto ID is required'}), 400
+
+    crypto = Crypto.query.get(data['crypto_id'])
+    if not crypto:
+        return jsonify({'msg': 'Crypto not found'}), 404
+
+    if UserFavorites.query.filter_by(user_id=user.id, crypto_id=crypto.id).first():
+        return jsonify({'msg': 'Favorite already exists'}), 400
+
+    new_favorite = UserFavorites(user_id=user.id, crypto_id=crypto.id)
+    db.session.add(new_favorite)
+    db.session.commit()
+    
+    return jsonify({'msg': 'Favorite added successfully'}), 201
+
+# Endpoint para eliminar un favorito
+@app.route('/api/favorites/<int:crypto_id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorite(crypto_id):
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    
+    if not user:
+        return jsonify({'msg': 'User not found'}), 404
+
+    favorite = UserFavorites.query.filter_by(user_id=user.id, crypto_id=crypto_id).first()
+    if not favorite:
+        return jsonify({'msg': 'Favorite not found'}), 404
+
+    db.session.delete(favorite)
+    db.session.commit()
+    
+    return jsonify({'msg': 'Favorite deleted successfully'}), 200
 
 # Ejecutar la aplicación Flask
 if __name__ == '__main__':
